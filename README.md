@@ -1,13 +1,8 @@
 # Aurora Uplift VST2 Only
 
-Versão reescrita do Aurora Uplift para gerar **apenas VST2 de 64 bits para Windows**.
+**VST2 de 64 bits para Windows**.
 
-## Saída
 
-A compilação gera um único arquivo:
-
-```text
-Aurora Uplift.dll
 ```
 
 ## Recursos
@@ -24,15 +19,6 @@ Aurora Uplift.dll
 - Pitch bend
 - 32 parâmetros automatizáveis
 - Runtime do Visual C++ ligado estaticamente
-- Sem VST3 e sem pasta `.vst3`
-
-## Compilar no GitHub Actions
-
-1. Crie um repositório novo ou apague o conteúdo do repositório antigo.
-2. Envie **todo o conteúdo desta pasta**, incluindo `.github`.
-3. Abra **Actions > Build Windows VST2 DLL**.
-4. Clique em **Run workflow**.
-5. Quando ficar verde, abra a execução e baixe o artefato:
 
 ```text
 Aurora-Uplift-Windows-VST2
@@ -69,4 +55,4 @@ Esta primeira versão VST2-only não possui editor gráfico próprio. O FL Studi
 
 ## Créditos técnicos
 
-O projeto utiliza o DISTRHO Plugin Framework (DPF). Consulte `NOTICE-DPF.txt`.
+ Aurora Uplift VST2 Only foi desenvolvido pela Alza Produz, utilizando o DISTRHO Plugin Framework (DPF). Consulte `NOTICE-DPF.txt`.
