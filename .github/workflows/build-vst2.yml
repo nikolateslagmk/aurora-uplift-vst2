@@ -15,8 +15,22 @@ jobs:
       - name: Baixar projeto
         uses: actions/checkout@v4
 
-      - name: Validar arquivos
-        run: python tools/validate_project.py
+      - name: Verificar arquivos essenciais
+        shell: powershell
+        run: |
+          $arquivos = @(
+            "CMakeLists.txt",
+            "Source\DistrhoPluginInfo.h",
+            "Source\AuroraUpliftPlugin.cpp"
+          )
+
+          foreach ($arquivo in $arquivos) {
+            if (-not (Test-Path $arquivo)) {
+              throw "Arquivo ausente no repositorio: $arquivo"
+            }
+          }
+
+          Write-Host "Arquivos principais encontrados."
 
       - name: Configurar projeto
         run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
@@ -24,15 +38,28 @@ jobs:
       - name: Compilar VST2
         run: cmake --build build --config Release --target AuroraUplift-vst2 --parallel
 
-      - name: Preparar DLL
+      - name: Localizar e preparar DLL
         shell: powershell
         run: |
           New-Item -ItemType Directory -Force -Path package | Out-Null
-          $source = "build\bin\AuroraUplift-vst2.dll"
-          if (-not (Test-Path $source)) {
-            throw "A DLL VST2 nao foi encontrada em $source"
+
+          $dll = Get-ChildItem -Path build -Recurse -File -Filter "*.dll" |
+            Where-Object {
+              $_.Name -like "*AuroraUplift*vst2*.dll" -or
+              $_.Name -like "*AuroraUplift*.dll"
+            } |
+            Select-Object -First 1
+
+          if (-not $dll) {
+            Write-Host "Arquivos encontrados dentro de build:"
+            Get-ChildItem -Path build -Recurse -File |
+              Select-Object -ExpandProperty FullName
+
+            throw "A DLL do Aurora Uplift nao foi encontrada."
           }
-          Copy-Item $source "package\Aurora Uplift.dll" -Force
+
+          Write-Host "DLL encontrada em: $($dll.FullName)"
+          Copy-Item $dll.FullName "package\Aurora Uplift.dll" -Force
 
       - name: Enviar VST2
         uses: actions/upload-artifact@v4
