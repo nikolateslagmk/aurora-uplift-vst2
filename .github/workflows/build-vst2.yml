@@ -1,0 +1,42 @@
+name: Build Windows VST2 DLL
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-vst2:
+    runs-on: windows-2022
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Validar arquivos
+        run: python tools/validate_project.py
+
+      - name: Configurar projeto
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+
+      - name: Compilar VST2
+        run: cmake --build build --config Release --target AuroraUplift-vst2 --parallel
+
+      - name: Preparar DLL
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path package | Out-Null
+          $source = "build\bin\AuroraUplift-vst2.dll"
+          if (-not (Test-Path $source)) {
+            throw "A DLL VST2 nao foi encontrada em $source"
+          }
+          Copy-Item $source "package\Aurora Uplift.dll" -Force
+
+      - name: Enviar VST2
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aurora-Uplift-Windows-VST2
+          path: package/Aurora Uplift.dll
+          if-no-files-found: error
