@@ -1,0 +1,6 @@
+This project uses the DISTRHO Plugin Framework (DPF).
+DPF is Copyright (C) its contributors and is distributed under the ISC license.
+The VST2 compatibility layer used by DPF is documented by DPF as a clean-room,
+BSD-3-Clause implementation based on Xaymar's work.
+
+DPF project: https://github.com/DISTRHO/DPF

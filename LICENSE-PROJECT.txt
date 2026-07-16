@@ -1,0 +1,5 @@
+Aurora Uplift project source code created for the user.
+You may use and modify this project for personal and commercial music production.
+Redistribution of plugin binaries or source must preserve third-party notices and
+is subject to the licenses and trademark rules applicable to the plugin format
+and included dependencies.
